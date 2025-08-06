@@ -1,2 +1,69 @@
 # How-to-control-the-number-of-visible-items-in-a-ComboBox-cell-in-WinForms-GridControl
-This demos shows how to control the number of visible items in a ComboBox cell in WinForms GridControl?
+In order to control the items showing in dropdown of combo box, GridComboBoxListBoxPart.DropDownRows property can be used. The GridComboBoxListBoxPart is the actual control type of the list that is dropped to display the items. But it is buried a little deep and generally needs an event handler to set it in [WinForms GridControl](https://www.syncfusion.com/winforms-ui-controls/grid-control).
+
+The reason for using an event handler is that normally a single ComboBox control is shared among all ComboBox cells. Each cell can potentially have a different list and may need different numbers of visible rows. So, to handle this, you must catch Grid.CurrentCellShowingDropDown event and set the property there depending upon the exact row and column.
+
+**C#**
+
+```
+//Form()
+gridControl1.CurrentCellShowingDropDown += gridControl1_CurrentCellShowingDropDown;
+ 
+void gridControl1_CurrentCellShowingDropDown(object sender, GridCurrentCellShowingDropDownEventArgs e)
+{
+   GridControlBase grid = sender as GridControlBase;
+   if (grid != null)
+   {
+      GridCurrentCell cc = grid.CurrentCell;
+      GridComboBoxCellRenderer cr = cc.Renderer as GridComboBoxCellRenderer;
+ 
+      //Sets number of visible items for comboboxes in Row 6 as 4, Row 4 as 7, Row 2 as 10 , and so on. 
+ 
+      if (cc != null)
+      {
+         if (cc.RowIndex == 6)
+            ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 4;
+         else if (cc.RowIndex == 4)
+            ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 7;
+         else if (cc.RowIndex == 2)
+            ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 10;
+         else ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 6;
+      }
+   }
+}
+```
+
+**VB**
+
+```
+‘Form()
+Private gridControl1.CurrentCellShowingDropDown += AddressOf gridControl1_CurrentCellShowingDropDown
+ 
+Private Sub gridControl1_CurrentCellShowingDropDown(ByVal sender As Object, ByVal e As GridCurrentCellShowingDropDownEventArgs)
+   Dim grid As GridControlBase = TryCast(sender, GridControlBase)
+   If grid IsNot Nothing Then
+ Dim cc As GridCurrentCell = grid.CurrentCell
+ Dim cr As GridComboBoxCellRenderer = TryCast(cc.Renderer, GridComboBoxCellRenderer)
+ 
+   'Sets number of visible items for comboboxes in Row 6 as 4, Row 4 as 7, Row 2 as 10 , and so on. 
+ 
+   If cc IsNot Nothing Then
+      If cc.RowIndex = 6 Then
+ CType(cr.ListBoxPart, GridComboBoxListBoxPart).DropDownRows = 4
+      ElseIf cc.RowIndex = 4 Then
+ CType(cr.ListBoxPart, GridComboBoxListBoxPart).DropDownRows = 7
+      ElseIf cc.RowIndex = 2 Then
+ CType(cr.ListBoxPart, GridComboBoxListBoxPart).DropDownRows = 10
+      Else
+  CType(cr.ListBoxPart, GridComboBoxListBoxPart).DropDownRows = 6
+      End If
+   End If
+ End If
+End Sub
+``` 
+
+**Screenshot**
+
+![Dropdown of combobox in a cell](DropdownrowsComboBox.png)
+
+[View sample in GitHub](https://github.com/SyncfusionExamples/How-to-control-the-number-of-visible-items-in-a-ComboBox-cell-in-WinForms-GridControl)
