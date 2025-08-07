@@ -6,64 +6,60 @@ The reason for using an event handler is that normally a single ComboBox control
 **C#**
 
 ```
-//Form()
-gridControl1.CurrentCellShowingDropDown += gridControl1_CurrentCellShowingDropDown;
- 
-void gridControl1_CurrentCellShowingDropDown(object sender, GridCurrentCellShowingDropDownEventArgs e)
+gridControl1.CurrentCellShowingDropDown += OnCurrentCellShowingDropDown;
+
+void OnCurrentCellShowingDropDown(object sender, GridCurrentCellShowingDropDownEventArgs e)
 {
-   GridControlBase grid = sender as GridControlBase;
-   if (grid != null)
-   {
-      GridCurrentCell cc = grid.CurrentCell;
-      GridComboBoxCellRenderer cr = cc.Renderer as GridComboBoxCellRenderer;
- 
-      //Sets number of visible items for comboboxes in Row 6 as 4, Row 4 as 7, Row 2 as 10 , and so on. 
- 
-      if (cc != null)
-      {
-         if (cc.RowIndex == 6)
-            ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 4;
-         else if (cc.RowIndex == 4)
-            ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 7;
-         else if (cc.RowIndex == 2)
-            ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 10;
-         else ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 6;
-      }
-   }
+    GridControlBase grid = sender as GridControlBase;
+    if (grid != null)
+    {
+        GridCurrentCell cc = grid.CurrentCell;
+        GridComboBoxCellRenderer cr = cc.Renderer as GridComboBoxCellRenderer;
+
+        //Sets number of visible items for comboboxes in Row 6 as 4, Row 4 as 7, Row 2 as 10 , and so on. 
+
+        if (cc != null)
+        {
+            if (cc.RowIndex == 6)
+                ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 4;
+            else if (cc.RowIndex == 4)
+                ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 7;
+            else if (cc.RowIndex == 2)
+                ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 10;
+            else ((GridComboBoxListBoxPart)cr.ListBoxPart).DropDownRows = 6;
+        }
+    }
 }
 ```
 
 **VB**
 
 ```
-‘Form()
-Private gridControl1.CurrentCellShowingDropDown += AddressOf gridControl1_CurrentCellShowingDropDown
- 
-Private Sub gridControl1_CurrentCellShowingDropDown(ByVal sender As Object, ByVal e As GridCurrentCellShowingDropDownEventArgs)
-   Dim grid As GridControlBase = TryCast(sender, GridControlBase)
-   If grid IsNot Nothing Then
- Dim cc As GridCurrentCell = grid.CurrentCell
- Dim cr As GridComboBoxCellRenderer = TryCast(cc.Renderer, GridComboBoxCellRenderer)
- 
-   'Sets number of visible items for comboboxes in Row 6 as 4, Row 4 as 7, Row 2 as 10 , and so on. 
- 
-   If cc IsNot Nothing Then
-      If cc.RowIndex = 6 Then
- CType(cr.ListBoxPart, GridComboBoxListBoxPart).DropDownRows = 4
-      ElseIf cc.RowIndex = 4 Then
- CType(cr.ListBoxPart, GridComboBoxListBoxPart).DropDownRows = 7
-      ElseIf cc.RowIndex = 2 Then
- CType(cr.ListBoxPart, GridComboBoxListBoxPart).DropDownRows = 10
-      Else
-  CType(cr.ListBoxPart, GridComboBoxListBoxPart).DropDownRows = 6
-      End If
-   End If
- End If
+AddHandler gridControl1.CurrentCellShowingDropDown, AddressOf OnCurrentCellShowingDropDown
+
+Private Sub OnCurrentCellShowingDropDown(sender As Object, e As GridCurrentCellShowingDropDownEventArgs)
+    Dim grid As GridControlBase = TryCast(sender, GridControlBase)
+    If grid IsNot Nothing Then
+        Dim cc As GridCurrentCell = grid.CurrentCell
+        Dim cr As GridComboBoxCellRenderer = TryCast(cc.Renderer, GridComboBoxCellRenderer)
+
+        If cc IsNot Nothing AndAlso cr IsNot Nothing Then
+            Dim listBoxPart As GridComboBoxListBoxPart = CType(cr.ListBoxPart, GridComboBoxListBoxPart)
+
+            ' Sets number of visible items for comboboxes in Row 6 as 4, Row 4 as 7, Row 2 as 10 , and so on.
+            Select Case cc.RowIndex
+                Case 6
+                    listBoxPart.DropDownRows = 4
+                Case 4
+                    listBoxPart.DropDownRows = 7
+                Case 2
+                    listBoxPart.DropDownRows = 10
+                Case Else
+                    listBoxPart.DropDownRows = 6
+            End Select
+        End If
+    End If
 End Sub
 ``` 
 
-**Screenshot**
-
 ![Dropdown of combobox in a cell](DropdownrowsComboBox.png)
-
-[View sample in GitHub](https://github.com/SyncfusionExamples/How-to-control-the-number-of-visible-items-in-a-ComboBox-cell-in-WinForms-GridControl)
