@@ -1,11 +1,12 @@
-# How-to-control-the-number-of-visible-items-in-a-ComboBox-cell-in-WinForms-GridControl
+# How to control the number of visible items in a ComboBox cell in WinForms GridControl?
+
 In order to control the items showing in dropdown of combo box, GridComboBoxListBoxPart.DropDownRows property can be used. The GridComboBoxListBoxPart is the actual control type of the list that is dropped to display the items. But it is buried a little deep and generally needs an event handler to set it in [WinForms GridControl](https://www.syncfusion.com/winforms-ui-controls/grid-control).
 
 The reason for using an event handler is that normally a single ComboBox control is shared among all ComboBox cells. Each cell can potentially have a different list and may need different numbers of visible rows. So, to handle this, you must catch Grid.CurrentCellShowingDropDown event and set the property there depending upon the exact row and column.
 
 **C#**
 
-```
+```csharp
 gridControl1.CurrentCellShowingDropDown += OnCurrentCellShowingDropDown;
 
 void OnCurrentCellShowingDropDown(object sender, GridCurrentCellShowingDropDownEventArgs e)
@@ -34,7 +35,7 @@ void OnCurrentCellShowingDropDown(object sender, GridCurrentCellShowingDropDownE
 
 **VB**
 
-```
+```vb
 AddHandler gridControl1.CurrentCellShowingDropDown, AddressOf OnCurrentCellShowingDropDown
 
 Private Sub OnCurrentCellShowingDropDown(sender As Object, e As GridCurrentCellShowingDropDownEventArgs)
